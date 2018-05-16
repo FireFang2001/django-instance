@@ -1,0 +1,135 @@
+{% extends 'base_main.html' %}
+{% load static %}
+{% block extCSS %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/market/market.css' %}">
+{% endblock %}
+
+{% block EXTJS %}
+    <script type="text/javascript" src="{% static 'app/market/js/market.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app/common/common.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <div id="market">
+
+        <aside>
+
+            <ul>
+
+                <!--闪购分类展示-->
+                {% for foodtype in foodtypes %}
+                    <li>
+                        <!--链接地址，点击获取分类下的商品信息-->
+                        <a href="/u/market/?typeid={{ foodtype.typeid }}&childcidname={{ childname }}&sort_type={{ sort_types }}">{{ foodtype.typename }}</a>
+                        {% ifequal foodtype.typeid typeid %}
+                            <span class="yellowSlide"></span>
+                        {% endifequal %}
+
+                    </li>
+                {% endfor %}
+                <!--处理数据结束-->
+
+            </ul>
+
+        </aside>
+
+
+        <section>
+            <nav>
+                <ul>
+                    <li id="all_types"><span>全部类型<span id="all_type_logo"
+                                                       class="glyphicon glyphicon-chevron-down">
+
+                    </span></span></li>
+
+                    <li id="sort_rule"><span>综合排序<span id="sort_rule_logo"
+                                                       class="glyphicon glyphicon-chevron-down">
+
+                    </span></span></li>
+                </ul>
+            </nav>
+
+            <menu>
+                <ul>
+
+                    <!--商品信息展示-->
+                    {% for good in goods %}
+                        <li>
+                            <a href="#">
+                                <img src="{{ good.productimg }}" alt="">
+                                <div class="shoppingInfo">
+                                    <h6>{{ good.productlongname }}</h6>
+                                    <p class="detailTag">
+                                        <span>精选</span>
+                                        <span>库存{{ good.storenums }}</span>
+                                    </p>
+                                    <p class="unit">
+                                        {{ good.specifics }}
+                                    </p>
+                                    <p class="price">
+                                        <span>¥{{ good.price }}</span>
+                                        <s>¥{{ good.marketprice }}</s>
+                                    </p>
+                                </div>
+                            </a>
+                        <section>
+                            {% csrf_token %}
+                            <button onclick="subShop({{ good.id }})">-</button>
+                            {% if user.id and good.cartmodel_set.first.c_num and good.cartmodel_set.first.user_id == user.id %}
+                                <span id="num_{{ good.id }}">{{ good.cartmodel_set.first.c_num }}</span>
+                            {% else %}
+                                <span id="num_{{ good.id }}">0</span>
+                            {% endif %}
+                            <button onclick="addShop({{ good.id }})">+</button>
+                        </section>
+                        </li>
+                    {% endfor %}
+                    <!--处理数据结束-->
+                </ul>
+
+                <div id="all_types_container">
+                    <div>
+                        <!--加载全部分类的数据-->
+                            {% for childname in childname_list %}
+                            <a href="/u/market/?typeid={{ typeid }}&childcidname={{ childname }}&sort_type={{ sort_types }}">
+                                <span>{{ childname }}</span>
+                            </a>
+                            {% endfor %}
+                        <!--处理数据结束-->
+
+
+                    </div>
+                </div>
+
+
+                <div id="sort_container">
+                    <div>
+{#      排序传递的也是状态码   0 , 1 ,2  , 3 ,4 ,5...                    #}
+                        <a href="/u/market/?typeid={{ typeid }}&childcidname={{ childcname }}&sort_type={{ 0 }}">
+                            <span>综合排序</span>
+                        </a>
+                        <a href="/u/market/?typeid={{ typeid }}&childcidname={{ childcname }}&sort_type={{ 1 }}">
+                            <span>销量排序</span>
+                        </a>
+                        <a href="/u/market/?typeid={{ typeid }}&childcidname={{ childcname }}&sort_type={{ 2 }}">
+                            <span>价格降序</span>
+                        </a>
+                        <a href="/u/market/?typeid={{ typeid }}&childcidname={{ childcname }}&sort_type={{ 3 }}">
+                            <span>价格升序</span>
+                        </a>
+
+                    </div>
+                </div>
+
+            </menu>
+
+        </section>
+
+
+    </div>
+
+
+{% endblock %}

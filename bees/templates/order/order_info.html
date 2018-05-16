@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block EXTJS %}
+    <script type="text/javascript" src="{% static 'app/order/js/order.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="order_info" class="container">
+
+    <!--订单编号-->
+    <h3>订单编号:{{ order_id }}</h3>
+    <!--处理结束-->
+    <ul>
+
+        <!--所有订单信息展示-->
+        {% for ordergood in orders.ordergoodsmodel_set.all %}
+            <div style="height: 4px; background-color: blue"></div>
+            <li style="font-size: 35px">
+                <!--商品名称展示-->
+                {{ ordergood.goods.productlongname }}
+                <img src="{{ ordergood.goods.productimg }}">
+
+                <span> <!-- 数量展示 -->数量{{ ordergood.goods_num }}</span>
+            </li>
+            <div style="height: 2px; background-color: darkseagreen"></div>
+        {% endfor %}
+        <p style="font-size: 45px">总计：<span style="color: red">￥{{ orders.o_total }}元</span></p>
+        <!--订单处理结束-->
+
+    </ul>
+        <!--订单id展示-->
+        <a href="{% url 'axf:orderpay' order_id %}" style="font-size: 35px">
+            <button id="alipay" class="btn btn-success btn-block" orderid="">
+                Alipay
+            </button>
+        </a>
+
+    </div>
+
+
+{% endblock %}

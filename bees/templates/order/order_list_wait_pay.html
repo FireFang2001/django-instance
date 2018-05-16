@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h3>待付款订单列表</h3>
+
+    <ul>
+        <!--订单信息展示-->
+        {% for order in orders %}
+            <div style="height: 4px; background-color: blue"></div>
+            <li>
+                <a href="/u/pay/{{ order.id }}" style="font-size: 35px">
+                    <p><!-- 订单id -->订单编号{{ order.id }}</p>
+                    <div style="height: 2px; background-color: darkseagreen"></div>
+                    {% for ordergoods in order.ordergoodsmodel_set.all %}
+                    <p><!-- 数量 -->商品数量{{ ordergoods.goods_num }}</p>
+                        <!--展示商品的名称-->
+                        {{ ordergoods.goods.productlongname }}
+                        <li>
+                            <img src="{{ ordergoods.goods.productimg }}" alt="">
+                        </li>
+                        <!--处理结束-->
+                        <div style="height: 2px; background-color: darkseagreen"></div>
+                    {% endfor %}
+                </a>
+            </li>
+            <p style="font-size: 45px">总计：<span style="color: red">￥{{ order.o_total }}元</span></p>
+        {% endfor %}
+        <!--订单处理结束-->
+
+
+    </ul>
+
+
+{% endblock %}

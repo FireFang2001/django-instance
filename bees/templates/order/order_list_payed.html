@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h3>待收货订单列表</h3>
+
+    <ul>
+        <!--订单展示-->
+        {% for order in orders %}
+            <div style="height: 4px; background-color: blue"></div>
+            <li>
+                <a href="#" style="font-size: 35px">
+                    <p><!-- 订单id -->订单号：{{ order.id }}</p>
+                    <div style="height: 2px; background-color: darkseagreen"></div>
+                    {% for ordergoods in order.ordergoodsmodel_set.all %}
+                    <p><!-- 数量 -->商品数量{{ ordergoods.goods_num }}</p>
+                        <!--展示商品的名称-->
+                        {{ ordergoods.goods.productlongname }}
+                        <li>
+                            <img src="{{ ordergoods.goods.productimg }}" alt="">
+                        </li>
+                        <div style="height: 2px; background-color: darkseagreen"></div>
+                        <!--处理结束-->
+                    {% endfor %}
+                </a>
+            </li>
+        {% endfor %}
+        <!--订单处理结束-->
+
+    </ul>
+
+
+{% endblock %}
